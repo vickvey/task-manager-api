@@ -1,13 +1,11 @@
-import { configDotenv } from "dotenv";
-configDotenv(".env");
 import express from "express";
 import cors from "cors";
 import { apiResponse } from "./utils/apiResponse.js";
 import httpLogger from "./middlewares/httpLogger.js";
 import logger from "./utils/logger.js";
 import { connectDB } from "./db/memoryDb.js";
+import { node_env, port } from "./config.js";
 
-const PORT = process.env.PORT;
 const app = express();
 
 // Must Setup Middlewares
@@ -30,7 +28,7 @@ app.get("/", (_req, res) => {
 });
 
 // DEV: Only
-if (process.env.NODE_ENV === "development") {
+if (node_env === "development") {
   app.get("/throw-error", (_req, _res) => {
     logger.error("Broken Error");
     throw new Error("Broken");
@@ -52,7 +50,7 @@ if (process.env.NODE_ENV === "development") {
 // app.use(errorHandler); // Using Currently Default Express Global Error Handler
 
 connectDB().then(() => {
-  app.listen(PORT, () => {
-    logger.info(`Server started on port ${PORT} ...`);
+  app.listen(port, () => {
+    logger.info(`Server started on port ${port} ...`);
   });
 });
