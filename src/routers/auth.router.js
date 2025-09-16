@@ -1,10 +1,13 @@
 import { Router } from "express";
+import validateData from "../middlewares/validationMiddleware.js";
+import { userLoginSchema, userRegisterSchema } from "../schema/auth.schema.js";
 
 const router = Router();
 
-// router.post("/register", registerUser);
+// TODO:
+// router.post("/register", validateData(userRegisterSchema), registerUser);
 
-// router.post("/login", loginUser);
+// router.post("/login", validateData(userLoginSchema), loginUser);
 
 // router.post("/logout", logoutUser);
 

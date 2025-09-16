@@ -5,6 +5,7 @@ import httpLogger from "./middlewares/httpLogger.js";
 import logger from "./utils/logger.js";
 import { connectDB } from "./db/memoryDb.js";
 import { node_env, port } from "./config.js";
+import authRouter from "./routers/auth.router.js";
 
 const app = express();
 
@@ -17,7 +18,7 @@ app.use(
   })
 );
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true, limit: "15kb" }));
 
 // Custom Middlewares
 app.use(httpLogger);
@@ -35,7 +36,7 @@ if (node_env === "development") {
   });
 }
 
-// app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/auth", authRouter);
 
 // Private Routes
 // app.use(authenticate);
