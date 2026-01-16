@@ -9,13 +9,8 @@ export const connectDB = async () => {
   try {
     mongod = await MongoMemoryServer.create(); // start in-memory MongoDB
     const uri = mongod.getUri();
-
-    await mongoose.connect(uri, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    });
-
-    console.log('[db] Connected to in-memory MongoDB');
+    await mongoose.connect(uri);
+    console.log('==> [db] Connected to in-memory MongoDB');
   } catch (err) {
     console.error('[db] Failed to connect:', err);
     process.exit(1);

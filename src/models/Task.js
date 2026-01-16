@@ -1,21 +1,6 @@
-// @ts-check
 import mongoose from "mongoose";
+import slugify from "slugify";
 
-/**
- * @typedef {Object} TaskDocument
- * @property {string} title
- * @property {string} [description] // Optional
- * @property {"todo" | "in-progress" | "done"} status
- * @property {"low" | "medium" | "high"} [priority]
- * @property {Date} [dueDate] // Optional
- * @property {mongoose.Types.ObjectId} userId
- * @property {mongoose.Types.ObjectId[]} [categories] // Optional
- * @property {Date} [createdAt] // Optional
- * @property {Date} [updatedAt] // Optional
- * @property {mongoose.Types.ObjectId} [_id]
- */
-
-/** @type {mongoose.Schema<TaskDocument>} */
 const taskSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -32,6 +17,7 @@ const taskSchema = new mongoose.Schema({
     enum: ['low', 'medium', 'high'],
   },
   dueDate: Date,
+  slug: String,
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
@@ -48,12 +34,25 @@ const taskSchema = new mongoose.Schema({
 // Indexes
 taskSchema.index({ userId: 1 });
 taskSchema.index({ userId: 1, status: 1 });
+taskSchema.index({ slug: 1, userId: 1 }, { unique: true });
+
 // TODO: Advanced Stuff
 // taskSchema.index({ title: 'text', description: 'text' }, {
 //   weights: { title: 5, description: 1 },
 //   name: "TextIndex"
 // });
 
+taskSchema.pre("save", function (next) {
+  if (!this.isModified("title")) return next();
+
+  this.slug = slugify(this.title, {
+    lower: true,
+    strict: true, // removes special characters
+    trim: true
+  })
+
+})
+
 const Task = mongoose.model('Task', taskSchema);
 
-export {Task};
+export { Task };
