@@ -14,17 +14,14 @@ const taskSchema = new mongoose.Schema({
   priority: {
     type: String,
     enum: ['low', 'medium', 'high'],
+    default: 'low'
   },
   dueDate: Date,
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true,
-  },
-  categories: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Category"
-  }],
+  }
 }, {
   timestamps: true
 });
