@@ -1,7 +1,6 @@
 # TODOS
 
 - [x] Setup Custom Logger with winston. (`./utils/logger.js`)
-- [x] Setup Custom HTTP Logger middleware. (`./middlewares/httpLogger.js`).
 
 - [x] Wrote `User.js` and `Category.js` models.
 - [x] Write `Task.js` model.
@@ -14,14 +13,9 @@
 ---
 
 - [x] Setup Authenticaton auth routes.
-- [x] Implemented auth user schemas using zod.
-- [x] Setup Validation Middleware using zod.
-- [ ] Write controllers for auth routes.
-
----
-
-- [ ] Setup `Category` Schemas using zod.
-- [ ] Write controllers for `Category` routes.
+- [x] Write Auth Service Layer.
+- [x] Write controllers for auth routes.
+- [ ] Write Zod Verifier for Auth Endpoints
 
 ---
 

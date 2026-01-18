@@ -4,8 +4,8 @@ function hashPassword(password) {
   return argon2.hash(password);
 }
 
-function verifyPassword(actualPassword, hashedPassword) {
-  return argon2.verify(hashedPassword, actualPassword);
+function verifyPassword(digest, password) {
+  return argon2.verify(digest, password);
 }
 
 export { hashPassword, verifyPassword };

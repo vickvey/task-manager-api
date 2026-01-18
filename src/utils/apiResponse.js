@@ -5,12 +5,11 @@ function apiResponse(
   message = "",
   data = {}
 ) {
-  const response = {
+  return res.status(statusCode).json({
     success,
     message,
     data,
-  };
-  return res.status(statusCode).json(response);
+  });
 }
 
-export { apiResponse };
+export default apiResponse;
