@@ -1,31 +1,33 @@
-import { User } from "../models/User";
-import { Task } from "../models/Task"
-import ApiError from "../utils/ApiError";
+import { Task } from "../models/Task.js";
+import ApiError from "../utils/ApiError.js";
 
-export async function createTask(userId, title, description, status, priority, dueDate) {
-  const existingUser = await User.findById(userId);
-  if (!existingUser) throw new ApiError(400, "User doesn't exist");
-
-  const newTask = await Task.create({
-    title,
-    description,
-    status,
-    priority,
-    dueDate,
-    userId,
-  })
-
-  return newTask;
+export async function create(userId, data) {
+  return await Task.create({ ...data, userId });
 }
 
-export async function getTaskById(userId, taskId) {
-  const existingUser = await User.findById(userId);
-  if (!existingUser) throw new ApiError(400, "User doesn't exist");
-
-  const existingTask = await Task.findById(taskId);
-  if (!existingTask) throw new ApiError(400, "Task doesn't exist");
-
-  return existingTask;
+export async function getById(userId, taskId) {
+  const task = await Task.findOne({ _id: taskId, userId });
+  if (!task) throw new ApiError(404, "Task not found");
+  return task;
 }
 
-/// TODO: Complete this module
+export async function getAll(userId, filters = {}) {
+  return await Task.find({ userId, ...filters }).sort({ createdAt: -1 });
+}
+
+export async function updateById(userId, taskId, updateData) {
+  const task = await Task.findOneAndUpdate(
+    { _id: taskId, userId },
+    updateData,
+    { new: true, runValidators: true }
+  );
+
+  if (!task) throw new ApiError(404, "Task not found");
+  return task;
+}
+
+export async function removeById(userId, taskId) {
+  const task = await Task.findOneAndDelete({ _id: taskId, userId });
+  if (!task) throw new ApiError(404, "Task not found");
+  return task;
+}

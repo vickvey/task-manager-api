@@ -1,11 +1,18 @@
-import apiErrorResponse from "../utils/apiErrorResponse.js";
-import ApiError from "../utils/ApiError.js";
-
 export default function errorHandler(err, req, res, next) {
-  if (err instanceof ApiError) {
-    return apiErrorResponse(res, err.statusCode, err.message);
+  const statusCode = err.statusCode || 500;
+
+  const response = {
+    success: false,
+    message: err.message || "Internal Server Error",
+  };
+
+  if (process.env.NODE_ENV === "development") {
+    response.stack = err.stack;
   }
 
-  console.error(err); // unexpected errors
-  return apiErrorResponse(res, 500, "Internal Server Error");
+  if (statusCode === 500) {
+    console.error(err);
+  }
+
+  res.status(statusCode).json(response);
 }

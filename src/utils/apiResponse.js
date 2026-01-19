@@ -1,15 +1,9 @@
-function apiResponse(
-  res,
-  statusCode = 200,
-  success = true,
-  message = "",
-  data = {}
-) {
-  return res.status(statusCode).json({
+function apiResponse(success = true, message = "", data = null) {
+  return {
     success,
     message,
     data,
-  });
+  };
 }
 
 export default apiResponse;
